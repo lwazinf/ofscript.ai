@@ -1,6 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useRecoilState } from "recoil";
+import { TrayContentState } from "../atoms/atoms";
 
 interface MenuItem_Props {
   data: any;
@@ -8,6 +10,7 @@ interface MenuItem_Props {
 
 const MenuItem_ = ({ data }: MenuItem_Props) => {
     const [hoverActive_, setHoverActive_] = useState(false)
+    const [trayContent_, setTrayContent_] = useRecoilState(TrayContentState)
     const router = useRouter()
     const handleLinkClick = () => {
       // Open the link in a new tab
@@ -23,15 +26,20 @@ const MenuItem_ = ({ data }: MenuItem_Props) => {
         setHoverActive_(false)
       }}
       onClick={() => {
-        const httpsUrlPattern = /^https:\/\//;
-        if(!httpsUrlPattern.test(data.target)){
-          router.push(data.target);
+        // const httpsUrlPattern = /^https:\/\//;
+        // if(!httpsUrlPattern.test(data.target)){
+        //   router.push(data.target);
+        // }else{
+        //   handleLinkClick()
+        // }
+        if(trayContent_ == ''){
+          setTrayContent_(data.name)
         }else{
-          handleLinkClick()
+          setTrayContent_('')
         }
       }}
     >
-      <FontAwesomeIcon icon={data.icon} className={`m-2 cursor-pointer`} />
+      <FontAwesomeIcon icon={data.icon} className={`m-2 cursor-pointer ${data.name == 'Deliver' && 'animate-pulse'}`} />
       <div className={`w-[80px] min-h-2 flex flex-col justify-center items-start absolute ${hoverActive_ ? 'right-[-85px] duration-500 opacity-80' : 'right-[-60px] duration-200 opacity-0'} transition-all pointer-events-none`}>
         <div
           className={`text-[13px] text-white min-w-2 min-h-2 bg-[#333333] rounded-[3px] px-1`}
