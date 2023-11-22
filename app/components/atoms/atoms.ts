@@ -6,3 +6,8 @@ export const TrayContentState = atom({
     key: `${COMPONENT_NAME}/TrayContentState`,
     default: '',
   });
+
+  export const UserState = atom({
+    key: `${COMPONENT_NAME}/UserState`,
+    default: null,
+  });
