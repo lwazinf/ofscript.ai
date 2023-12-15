@@ -5,6 +5,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// @ts-ignore
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
