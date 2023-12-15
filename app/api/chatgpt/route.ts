@@ -1,24 +1,36 @@
+// app/api/chatgpt/route.ts
 import { NextApiRequest, NextApiResponse } from "next";
-import OpenAI from 'openai';
+import OpenAI from "openai";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// @ts-ignore
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
-  const { prompt } = req.query;
+export async function getServerSideProps({
+  query: { prompt },
+}: {
+  query: { prompt?: string };
+}) {
+  const res: NextApiResponse = {
+    // @ts-ignore
+    status: 200,
+    json: () => ({}),
+  };
+
   if (!prompt) {
-    return res.status(400).json({ error: "Prompt missing" });
+    // @ts-ignore
+    res.status = 400;
+    res.json({ error: "Prompt missing" });
+    return { props: {} };
   }
 
-  const promptText = prompt.toString(); // Convert prompt to string if necessary
+  const promptText = prompt.toString();
 
-  if (promptText.length > 1000) { // Increased the maximum prompt length
-    return res.status(400).json({ error: "Prompt too long" });
+  if (promptText.length > 1000) {
+    // @ts-ignore
+    res.status = 400;
+    res.json({ error: "Prompt too long" });
+    return { props: {} };
   }
 
   try {
@@ -32,13 +44,17 @@ export default async function handler(
       top_p: 1.0,
     });
 
-    const quote = completion.choices[0]
-      ? completion.choices[0].text
-      : "";
+    const quote = completion.choices[0] ? completion.choices[0].text : "";
 
-    res.status(200).json({ quote });
+    // @ts-ignore
+    res.status = 200;
+    res.json({ quote });
+    return { props: {} };
   } catch (error) {
     console.error("Error fetching quote:", error);
-    res.status(500).json({ error: "Failed to fetch quote" });
+    // @ts-ignore
+    res.status = 500;
+    res.json({ error: "Failed to fetch quote" });
+    return { props: {} };
   }
 }
