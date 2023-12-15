@@ -11,3 +11,8 @@ export const TrayContentState = atom({
     key: `${COMPONENT_NAME}/UserState`,
     default: null,
   });
+
+  export const TextDBState = atom({
+    key: `${COMPONENT_NAME}/TextDBState`,
+    default: [],
+  });

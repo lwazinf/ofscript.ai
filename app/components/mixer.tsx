@@ -7,10 +7,13 @@ const AudioMixer = ({src}:AudioMixerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
+        // @ts-ignore
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        // @ts-ignore
     let source;
 
     // Function to load an MP3 file
+        // @ts-ignore
     async function loadMP3(file) {
       const response = await fetch(file);
       const arrayBuffer = await response.arrayBuffer();
@@ -18,6 +21,7 @@ const AudioMixer = ({src}:AudioMixerProps) => {
     }
 
     // Function to mix two audio buffers with a specified volume for the second audio
+        // @ts-ignore
     function mixBuffersWithVolume(buffer1, buffer2, volume) {
       const length = Math.max(buffer1.length, buffer2.length);
       const mixedBuffer = audioContext.createBuffer(1, length, audioContext.sampleRate);
@@ -33,6 +37,7 @@ const AudioMixer = ({src}:AudioMixerProps) => {
     }
 
     // Function to play a mixed audio buffer
+        // @ts-ignore
     function playMixedAudio(buffer) {
       source = audioContext.createBufferSource();
       source.buffer = buffer;
@@ -53,12 +58,14 @@ const AudioMixer = ({src}:AudioMixerProps) => {
 
         // Handle play button click
         const playButton = document.getElementById('playButton');
+        // @ts-ignore
         playButton.addEventListener('click', () => {
           if (!isPlaying) {
             playMixedAudio(mixedBuffer);
             setIsPlaying(true);
           } else {
             // Stop the playback if the button is clicked again
+        // @ts-ignore
             source.stop();
             setIsPlaying(false);
           }

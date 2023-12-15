@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useRecoilState } from "recoil";
 import { TrayContentState, UserState } from "../atoms/atoms";
 import { auth, signIn_, signOut_ } from "@/firebase";
@@ -16,6 +16,7 @@ const MenuItem_ = ({ data }: MenuItem_Props) => {
   const [trayContent_, setTrayContent_] = useRecoilState(TrayContentState);
   const [user_, setUser_] = useRecoilState(UserState);
   const router = useRouter();
+  const pathname = usePathname();
   const handleLinkClick = () => {
     // Open the link in a new tab
     window.open(data.target, "_blank");
@@ -36,6 +37,7 @@ const MenuItem_ = ({ data }: MenuItem_Props) => {
         };
 
         // Set the new user object in your application state
+        // @ts-ignore
         setUser_(newUser);
 
         // Additional logic, if needed
@@ -63,12 +65,44 @@ const MenuItem_ = ({ data }: MenuItem_Props) => {
         setHoverActive_(false);
       }}
       onClick={async () => {
+        
         const httpsUrlPattern = /^https:\/\//;
+        if(data.name != 'Auth'){// If not url, does some function, in app
         if (!httpsUrlPattern.test(data.target)) {
-          router.push(data.target);
+          // Check if trayContent_ is equal to data.name
+          if (trayContent_ !== "" && data.target !== pathname) {
+            // If trayContent_ is not empty and data.target is not equal to pathname
+            if (trayContent_ === data.name) {
+              // If trayContent_ is equal to data.name, set trayContent_ to an empty string
+              setTrayContent_('');
+              router.push(data.target); // This line is commented out
+            } else {
+              // If trayContent_ is not equal to data.name, set trayContent_ to data.name
+              setTrayContent_(data.name);
+            }
+          } else {
+            // If trayContent_ is empty or data.target is equal to pathname
+            if (data.target === pathname) {
+              // If data.target is equal to pathname, log 'working' and set trayContent_ to data.name
+              if(trayContent_ == data.name){if(trayContent_ == ''){
+                setTrayContent_(data.name);
+              }else{
+                setTrayContent_('');
+              }}else{
+                setTrayContent_(data.name);
+              }
+            } else {
+              // If data.target is not equal to pathname, log 'not working' and set trayContent_ to data.name
+              console.log('not working');
+              setTrayContent_(data.name);
+            }
+          }
         } else {
+          // If url, open new tab
           handleLinkClick();
-        }
+        }}
+        
+
         if (data.name == "Auth") {
           if (data.icon == faPowerOff) {
             try {
@@ -79,7 +113,9 @@ const MenuItem_ = ({ data }: MenuItem_Props) => {
           } else {
             try {
               signIn_().then((e) => {
+                // @ts-ignore
                 if (e?.user) {
+                  // @ts-ignore
                   setUser_(e?.user);
                 }
               });
@@ -88,11 +124,6 @@ const MenuItem_ = ({ data }: MenuItem_Props) => {
             }
           }
         }
-        // if(trayContent_ == ''){
-        //   setTrayContent_(data.name)
-        // }else{
-        //   setTrayContent_('')
-        // }
       }}
     >
       <FontAwesomeIcon icon={data.icon} className={`m-2 cursor-pointer`} />

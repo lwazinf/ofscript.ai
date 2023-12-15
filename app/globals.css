@@ -57,6 +57,6 @@ body {
   input:focus,
   textarea:focus {
     outline: none;
-    background-color: rgb(0 0 0 / 0);
+    background-color: transparent;
   }
 }

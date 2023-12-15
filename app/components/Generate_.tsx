@@ -15,6 +15,7 @@ const Generate_ = ({}:Generate_Props) => {
 
   // handler functions
   const handleGenerateTTS = async () => {
+    // @ts-ignore
     const selectedVoice = voiceRef.current.value;
     const text = "Once upon a lily pad in the heart of Froggington Forest, there lived a mischievous little frog named Pepe. Pepe wasn't your ordinary frog; he had a knack for clever tricks and cunning schemes. One sunny day, Pepe hatched a plan to scam three unsuspecting forest friends. His first target was Benny the Bunny, a fluffy and curious rabbit with big, floppy ears.";
 
@@ -44,6 +45,7 @@ const Generate_ = ({}:Generate_Props) => {
 
       setAudio(file);
     } catch (error) {
+        // @ts-ignore
       console.log(error.message);
     } finally {
       setLoading(false);
@@ -63,6 +65,7 @@ const Generate_ = ({}:Generate_Props) => {
 
         setVoices(data.voices);
       } catch (error) {
+        // @ts-ignore
         console.log(error.message);
       }
     }
@@ -73,9 +76,12 @@ const Generate_ = ({}:Generate_Props) => {
 <main>
           <div className="flex gap-4 items-center">
             <label>Select a Voice:</label>
+            {/* @ts-ignore */}
             <select ref={voiceRef} className="bg-blue-100 py-2 px-4 rounded-lg">
               {voices.map((voice) => (
+        // @ts-ignore
                 <option key={voice.voice_id} value={voice.voice_id}>
+        {/* @ts-ignore */}
                   {voice.name}
                 </option>
               ))}
