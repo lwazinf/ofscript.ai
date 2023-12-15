@@ -7,7 +7,7 @@ const openai = new OpenAI({
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const { prompt } = req.query;
   if (!prompt) {
