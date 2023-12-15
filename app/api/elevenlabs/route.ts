@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-export async function POST(request) {
+export async function POST(request: any) {
   const { message, voice } = await request.json();
 
   try {
@@ -9,6 +9,7 @@ export async function POST(request) {
       `https://api.elevenlabs.io/v1/text-to-speech/${voice}`,
       {
         method: "POST",
+        // @ts-ignore
         headers: {
           accept: "audio/mpeg",
           "Content-Type": "application/json",
@@ -38,6 +39,7 @@ export async function POST(request) {
 
     return new Response(JSON.stringify({ file: `${file}.mp3` }));
   } catch (error) {
+    // @ts-ignore
     return new Response(JSON.stringify({ error: error.message }));
   }
 }
