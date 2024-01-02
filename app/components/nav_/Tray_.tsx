@@ -24,7 +24,7 @@ const Tray_ = ({}: Tray_Props) => {
     blacklist: "",
     tone: "",
     chars: 0,
-    misc: "",
+    misc: null,
   });
   const pathname = usePathname();
   const pathname_ =
@@ -170,7 +170,9 @@ const Tray_ = ({}: Tray_Props) => {
               <div
                 className={`w-full h-[60px] backdrop-blur-sm rounded-[3px] m-[1px] cursor-pointer bg-black/10 hover:bg-black/20 transition-all duration-200 hover:duration-500 flex flex-col justify-center items-center`}
                 key={index}
-              />
+              >
+                {obj_}
+              </div>
             );
           })}
         </div>
